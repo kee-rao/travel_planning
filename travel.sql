@@ -33,6 +33,7 @@ CREATE TABLE ACCOMMODATION
     check_out_date date,
     price decimal(10,2),
     no_of_people INT,
+    rooms INT,
     DESTINATION_ID VARCHAR(20),
     FOREIGN KEY (DESTINATION_ID) REFERENCES Destination(DESTINATION_ID)
 );
