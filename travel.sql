@@ -2,6 +2,7 @@ CREATE TABLE USER(
 	name varchar(30),
     user_id varchar(15) primary key,
     email varchar(30),
+    password varchar(20),
     phno int
 );
 CREATE TABLE DESTINATION
