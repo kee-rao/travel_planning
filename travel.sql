@@ -40,7 +40,7 @@ CREATE TABLE ACCOMMODATION
 CREATE TABLE Booking (
     Booking_ID INT PRIMARY KEY,
     User_ID Varchar(15),
-    Accommodation_ID INT,
+    Accommodation_ID varchar(20),
     Flight_ID INT,
     FROMDATE DATE,
     TODATE DATE,
