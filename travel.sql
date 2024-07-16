@@ -27,7 +27,7 @@ CREATE TABLE FLIGHT(
 );
 CREATE TABLE ACCOMMODATION
 (
-    ACCOMMODATION_ID VARCHAR(20) PRIMARY KEY,
+    ACCOMMODATION_ID INT AUTO_INCREMENT PRIMARY KEY ,
     name varchar(30),
     check_in_date date,
     check_out_date date,
@@ -38,9 +38,9 @@ CREATE TABLE ACCOMMODATION
     FOREIGN KEY (DESTINATION_ID) REFERENCES Destination(DESTINATION_ID)
 );
 CREATE TABLE Booking (
-    Booking_ID INT PRIMARY KEY,
+    Booking_ID INT AUTO_INCREMENT PRIMARY KEY ,
     User_ID Varchar(15),
-    Accommodation_ID varchar(20),
+    Accommodation_ID INT,
     Flight_ID INT,
     FROMDATE DATE,
     TODATE DATE,
