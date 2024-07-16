@@ -9,7 +9,7 @@
     <style>
         body{
             font-family: Arial, sans-serif;
-            background-image: url("{{ url_for('static', filename='login.jpg') }}");
+            background-image: url("{{ url_for('static', filename='register.jpg') }}");
             background-size: cover;
             background-position: center;
             text-align: center;
@@ -19,7 +19,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container" style="position:relative; left:60px">
         <h2>User Login</h2>
         {% if error %}
             <div class="error">{{ error }}</div>
