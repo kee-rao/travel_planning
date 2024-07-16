@@ -6,6 +6,17 @@
     <title>User Login</title>
     <!-- Link your CSS file -->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            background-image: url("{{ url_for('static', filename='login.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
