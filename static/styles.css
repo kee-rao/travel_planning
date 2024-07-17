@@ -67,3 +67,29 @@ input[type=submit]:hover {
     color: red;
     font-weight: bold;
 }
+.navbar {
+    display: flex;
+    justify-content: flex-end;
+    padding: 30px;
+    background-color: #2c2c2c;
+    border-bottom: 1px solid #e7e7e7;
+}
+.navbar a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: #dfdfdf;
+}
+.navbar a:hover {
+    color: #555555;
+}
+.page-container {
+    padding: 20px;
+}
+
+.page-container h1 {
+    font-size: 24px;
+}
+
+.page-container p {
+    font-size: 16px;
+}

@@ -10,7 +10,7 @@ CREATE TABLE DESTINATION
     DESTINATION_ID INT PRIMARY KEY,
     Dest_NAME VARCHAR(50),
     COUNTRY VARCHAR(20),
-    CITY VARCHAR(20),
+    DESCRIPTION TEXT,
     POPULARITY INT
 );
 CREATE TABLE FLIGHT(
@@ -49,4 +49,19 @@ CREATE TABLE Booking (
     FOREIGN KEY (Accommodation_ID) REFERENCES Accommodation(Accommodation_ID),
     FOREIGN KEY (Flight_ID) REFERENCES Flight(Flight_ID)
 );
+--adding user_id as foreign key to accommodation--
+alter table accommodation
+add column user_id(15);
 
+alter table accommodation
+add constraint fk_user
+foreign key (user_id) references user(user_id);
+
+-- Step 1: Add the User_ID column to the Flight table
+ALTER TABLE Flight
+ADD COLUMN User_ID VARCHAR(15);
+
+-- Step 2: Add the foreign key constraint
+ALTER TABLE Flight
+ADD CONSTRAINT fk_flight_user
+FOREIGN KEY (User_ID) REFERENCES User(User_id);

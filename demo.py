@@ -7,7 +7,7 @@ app.secret_key = 'bananas'
 # MySQL configurations
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'password'
+app.config['MYSQL_PASSWORD'] = 'L1ghtD3ath'
 app.config['MYSQL_DB'] = 'travel'
 
 mysql = MySQL(app)
