@@ -17,51 +17,42 @@ CREATE TABLE FLIGHT(
     FLIGHT_ID INT AUTO_INCREMENT PRIMARY KEY,
     DEPARTURE_DATE DATE,
     RETURN_DATE DATE,
+    DEPARTURE_TIME TIME, -- Added for departure time
+    RETURN_TIME TIME,
     PRICE DECIMAL(10,2),
-    DEPARTURE_AIRPORT VARCHAR(20),
-    DESTINATION_AIRPORT VARCHAR(20),
-    NO_TRAVELLERS INT,
     AIRLINE VARCHAR(20),
     DESTINATION_ID INT,
+    User_ID VARCHAR(15),
+    FOREIGN KEY(USER_ID) REFERENCES USER(USER_ID),
     FOREIGN KEY (DESTINATION_ID) REFERENCES Destination(DESTINATION_ID)
 );
-CREATE TABLE ACCOMMODATION
-(
-    ACCOMMODATION_ID INT AUTO_INCREMENT PRIMARY KEY ,
-    name varchar(30),
-    check_in_date date,
-    check_out_date date,
-    price decimal(10,2),
-    no_of_people INT,
-    rooms INT,
+CREATE TABLE ACCOMMODATION(
+    ACCOMMODATION_ID INT AUTO_INCREMENT PRIMARY KEY,
+    ACCOMODATION_NAME VARCHAR(30),
+    PRICE_PER_NIGHT DECIMAL(10,2),
+    AVAIL_ROOMS INT,
     DESTINATION_ID INT,
-    FOREIGN KEY (DESTINATION_ID) REFERENCES Destination(DESTINATION_ID)
+    FOREIGN KEY(DESTINATION_ID) REFERENCES DESTINATION(DESTINATION_ID)
+);
+CREATE TABLE AccommodationReservation(
+    Reservation_ID INT AUTO_INCREMENT PRIMARY KEY,
+    ACCOMMODATION_ID INT,
+    USER_ID VARCHAR(15),
+    NO_ROOMS INT,
+    CHECK_IN_DATE DATE,
+    CHECK_OUT_DATE DATE,
+    FOREIGN KEY (ACCOMMODATION_ID) REFERENCES ACCOMMODATION(ACCOMMODATION_ID),
+    FOREIGN KEY (USER_ID) REFERENCES USER(USER_ID)
 );
 CREATE TABLE Booking (
-    Booking_ID INT AUTO_INCREMENT PRIMARY KEY ,
+    Booking_ID INT AUTO_INCREMENT PRIMARY KEY,
     User_ID Varchar(15),
-    Accommodation_ID INT,
+    Reservation_ID INT,
     Flight_ID INT,
     FROMDATE DATE,
     TODATE DATE,
     TotalPrice DECIMAL(10, 2),
     FOREIGN KEY (User_ID) REFERENCES User(User_id),
-    FOREIGN KEY (Accommodation_ID) REFERENCES Accommodation(Accommodation_ID),
+    FOREIGN KEY (Reservation_ID) REFERENCES AccommodationReservation(Reservation_ID),
     FOREIGN KEY (Flight_ID) REFERENCES Flight(Flight_ID)
 );
---adding user_id as foreign key to accommodation--
-alter table accommodation
-add column user_id(15);
-
-alter table accommodation
-add constraint fk_user
-foreign key (user_id) references user(user_id);
-
--- Step 1: Add the User_ID column to the Flight table
-ALTER TABLE Flight
-ADD COLUMN User_ID VARCHAR(15);
-
--- Step 2: Add the foreign key constraint
-ALTER TABLE Flight
-ADD CONSTRAINT fk_flight_user
-FOREIGN KEY (User_ID) REFERENCES User(User_id);
