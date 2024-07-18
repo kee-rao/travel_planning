@@ -15,6 +15,16 @@
     <div class="page-container">
         <h1>Welcome, {{ session['user_id'] }}</h1>
         <p>Discover your next adventure!</p>
+        <ul>
+            {% for destination in destinations %}
+                <li><a href="#">{{ destination[1] }}</a>
+                    <p>Country: {{destination[2]}}</p>
+                    <p>Description: {{destination[3]}}</p>
+                    <p>Popularity: {{destination[4]}}</p>
+                </li>
+
+            {% endfor %}
+        </ul>
     </div>
 </body>
 </html>

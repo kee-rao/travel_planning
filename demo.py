@@ -7,7 +7,7 @@ app.secret_key = 'bananas'
 # MySQL configurations
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'password'
+app.config['MYSQL_PASSWORD'] = 'L1ghtD3ath'
 app.config['MYSQL_DB'] = 'travel'
 
 mysql = MySQL(app)
@@ -77,7 +77,14 @@ def login():
 @app.route('/homepage')
 def homepage():
     if 'user_id' in session:
-        return render_template('homepage.html')
+        # Fetch destinations from database with name, country, popularity, and description
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT destination_id, Dest_NAME, country, description ,popularity FROM destination ORDER BY popularity DESC LIMIT 6")
+        destinations = cur.fetchall()
+        cur.close()
+        
+        return render_template('homepage.html', destinations=destinations)
+    
     return redirect(url_for('login'))
 
 @app.route('/logout')
