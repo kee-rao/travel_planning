@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Destination Details</title>
+    <style>
+        .booking-form {
+            display: none;
+            margin-top: 10px;
+        }
+    </style>
+    <script>
+        function toggleBookingForm(accommodationId) {
+            var form = document.getElementById('booking-form-' + accommodationId);
+            form.style.display = (form.style.display === 'none') ? 'block' : 'none';
+        }
+
+        function toggleFlightBookingForm(flightId) {
+            var form = document.getElementById('flight-booking-form-' + flightId);
+            form.style.display = (form.style.display === 'none') ? 'block' : 'none';
+        }
+    </script>
+</head>
+<body>
+    <h1>{{ destination[1] }} - {{ destination[2] }}</h1>
+    <p>{{ destination[3] }}</p>
+
+    <h2>Accommodations</h2>
+    <ul>
+        {% for accommodation in accommodations %}
+        <li>
+            {{ accommodation[1] }} - Price per night: {{ accommodation[2] }} - Available rooms: {{ accommodation[3] }}
+            <a href="javascript:void(0)" onclick="toggleBookingForm({{ accommodation[0] }})">Book</a>
+            <div class="booking-form" id="booking-form-{{ accommodation[0] }}">
+                <form method="post" action="#">
+                    <label>Check-in Date:</label>
+                    <input type="date" name="check_in_date" required><br>
+                    <label>Check-out Date:</label>
+                    <input type="date" name="check_out_date" required><br>
+                    <label>Number of Rooms:</label>
+                    <input type="number" name="no_rooms" required><br>
+                    <button type="submit">Book</button>
+                </form>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Flights</h2>
+    <form method="post">
+        <label>Departure Date:</label>
+        <input type="date" name="departure_date" required>
+        <label>Return Date:</label>
+        <input type="date" name="return_date" required>
+        <button type="submit">Filter Flights</button>
+    </form>
+    
+    <ul>
+        {% for flight in flights %}
+        <li>
+            {{ flight[1] }} - Departure: {{ flight[2] }} - Arrival: {{ flight[3] }} - Price: {{ flight[4] }}
+            <a href="javascript:void(0)" onclick="toggleFlightBookingForm({{ flight[0] }})">Book</a>
+            <div class="booking-form" id="flight-booking-form-{{ flight[0] }}">
+                <form method="post" action="#">
+                    <label>Departure Date:</label>
+                    <input type="date" name="departure_date" required><br>
+                    <label>Return Date:</label>
+                    <input type="date" name="return_date" required><br>
+                    <label>Number of Tickets:</label>
+                    <input type="number" name="no_tickets" required><br>
+                    <button type="submit">Book</button>
+                </form>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <a href="{{ url_for('homepage') }}">Back to homepage</a>
+</body>
+</html>

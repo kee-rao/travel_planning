@@ -87,6 +87,34 @@ def homepage():
     
     return redirect(url_for('login'))
 
+
+@app.route('/destination/<int:destination_id>', methods=['GET', 'POST'])
+def destination(destination_id):
+    cur = mysql.connection.cursor()
+    
+    cur.execute("SELECT * FROM DESTINATION WHERE destination_id = %s", [destination_id])
+    destination = cur.fetchone()
+    
+    cur.execute("SELECT * FROM ACCOMMODATION WHERE destination_id = %s", [destination_id])
+    accommodations = cur.fetchall()
+
+    flights = []
+    if request.method == 'POST':
+        departure_date = request.form.get('departure_date')
+        return_date = request.form.get('return_date')
+        cur.execute("""
+            SELECT * FROM FLIGHT 
+            WHERE destination_id = %s 
+            AND departure_date >= %s 
+            AND arrival_date <= %s
+        """, (destination_id, departure_date, return_date))
+        flights = cur.fetchall()
+    
+    cur.close()
+    
+    return render_template('destination.html', destination=destination, accommodations=accommodations, flights=flights)
+
+    
 @app.route('/logout')
 def logout():
     session.pop('username', None)

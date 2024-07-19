@@ -17,7 +17,7 @@
         <p>Discover your next adventure!</p>
         <ul>
             {% for destination in destinations %}
-                <li><a href="#">{{ destination[1] }}</a>
+                <li><a href="{{ url_for('destination', destination_id=destination[0]) }}">{{ destination[1] }}</a>
                     <p>Country: {{destination[2]}}</p>
                     <p>Description: {{destination[3]}}</p>
                     <p>Popularity: {{destination[4]}}</p>
