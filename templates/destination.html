@@ -54,17 +54,6 @@
         {% for flight in flights %}
         <li>
             {{ flight[1] }} - Departure: {{ flight[2] }} - Arrival: {{ flight[3] }} - Price: {{ flight[4] }}
-            
-                <form method="post" action="#">
-                    <label>Departure Date:</label>
-                    <input type="date" name="departure_date" required><br>
-                    <label>Return Date:</label>
-                    <input type="date" name="return_date" required><br>
-                    <label>Number of Tickets:</label>
-                    <input type="number" name="no_tickets" required><br>
-                    <button type="submit">Book</button>
-                </form>
-            </div>
         </li>
         {% endfor %}
     </ul>
