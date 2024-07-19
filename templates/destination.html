@@ -14,10 +14,6 @@
             form.style.display = (form.style.display === 'none') ? 'block' : 'none';
         }
 
-        function toggleFlightBookingForm(flightId) {
-            var form = document.getElementById('flight-booking-form-' + flightId);
-            form.style.display = (form.style.display === 'none') ? 'block' : 'none';
-        }
     </script>
 </head>
 <body>
@@ -58,8 +54,7 @@
         {% for flight in flights %}
         <li>
             {{ flight[1] }} - Departure: {{ flight[2] }} - Arrival: {{ flight[3] }} - Price: {{ flight[4] }}
-            <a href="javascript:void(0)" onclick="toggleFlightBookingForm('{{ flight[0] }}')">Book</a>
-            <div class="booking-form" id="flight-booking-form-{{ flight[0] }}">
+            
                 <form method="post" action="#">
                     <label>Departure Date:</label>
                     <input type="date" name="departure_date" required><br>

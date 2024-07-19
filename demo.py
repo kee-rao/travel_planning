@@ -106,7 +106,7 @@ def destination(destination_id):
             SELECT * FROM FLIGHT 
             WHERE destination_id = %s 
             AND departure_date >= %s 
-            AND arrival_date <= %s
+            AND return_date <= %s
         """, (destination_id, departure_date, return_date))
         flights = cur.fetchall()
     
