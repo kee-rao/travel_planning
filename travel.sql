@@ -39,19 +39,17 @@ CREATE TABLE acc_res(
     NO_ROOMS INT,
     CHECK_IN_DATE DATE,
     CHECK_OUT_DATE DATE,
+    price decimal(10,2),
     FOREIGN KEY (ACCOMMODATION_ID) REFERENCES ACCOMMODATION(ACCOMMODATION_ID),
     FOREIGN KEY (USER_ID) REFERENCES USER(USER_ID)
 );
-CREATE TABLE Booking (
-    Booking_ID INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE flight_res (
+    flight_resID INT AUTO_INCREMENT PRIMARY KEY,
     User_ID Varchar(15),
-    Reservation_ID INT,
     Flight_ID INT,
-    FROMDATE DATE,
-    TODATE DATE,
     TotalPrice DECIMAL(10, 2),
+    no_tickets int,
     FOREIGN KEY (User_ID) REFERENCES User(User_id),
-    FOREIGN KEY (Reservation_ID) REFERENCES acc_res(Reservation_ID),
     FOREIGN KEY (Flight_ID) REFERENCES Flight(Flight_ID)
 );
 
