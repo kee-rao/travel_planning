@@ -29,7 +29,7 @@
         {% for accommodation in accommodations %}
         <li>
             {{ accommodation[1] }} - Price per night: {{ accommodation[2] }} - Available rooms: {{ accommodation[3] }}
-            <a href="javascript:void(0)" onclick="toggleBookingForm({{ accommodation[0] }})">Book</a>
+            <a href="javascript:void(0)" onclick="toggleBookingForm('{{ accommodation[0]}}')">Book</a>
             <div class="booking-form" id="booking-form-{{ accommodation[0] }}">
                 <form method="post" action="#">
                     <label>Check-in Date:</label>
@@ -58,7 +58,7 @@
         {% for flight in flights %}
         <li>
             {{ flight[1] }} - Departure: {{ flight[2] }} - Arrival: {{ flight[3] }} - Price: {{ flight[4] }}
-            <a href="javascript:void(0)" onclick="toggleFlightBookingForm({{ flight[0] }})">Book</a>
+            <a href="javascript:void(0)" onclick="toggleFlightBookingForm('{{ flight[0] }}')">Book</a>
             <div class="booking-form" id="flight-booking-form-{{ flight[0] }}">
                 <form method="post" action="#">
                     <label>Departure Date:</label>
