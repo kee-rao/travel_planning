@@ -3,7 +3,7 @@ CREATE TABLE USER(
     user_id varchar(15) primary key,
     email varchar(30),
     password varchar(20) NOT NULL,
-    phno int
+    phno bigint
 );
 CREATE TABLE DESTINATION
 (
