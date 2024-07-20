@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session,flash
 from flask_mysqldb import MySQL
 
 app = Flask(__name__)
@@ -7,7 +7,7 @@ app.secret_key = 'bananas'
 # MySQL configurations
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'password'
+app.config['MYSQL_PASSWORD'] = 'L1ghtD3ath'
 app.config['MYSQL_DB'] = 'travel'
 
 mysql = MySQL(app)
@@ -114,7 +114,37 @@ def destination(destination_id):
     
     return render_template('destination.html', destination=destination, accommodations=accommodations, flights=flights)
 
-    
+@app.route('/book_accommodation/<int:accommodation_id>', methods=['POST'])
+def book_accommodation(accommodation_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    user_id = session['user_id']
+    check_in_date = request.form['check_in_date']
+    check_out_date = request.form['check_out_date']
+    no_rooms = int(request.form['no_rooms'])
+    destination_id = request.form['destination_id']
+
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT AVAIL_ROOMS FROM ACCOMMODATION WHERE ACCOMMODATION_ID = %s", [accommodation_id])
+    accommodation = cur.fetchone()
+
+    if accommodation and accommodation[0] >= no_rooms:
+        cur.execute("""
+            INSERT INTO acc_res (ACCOMMODATION_ID, USER_ID, NO_ROOMS, CHECK_IN_DATE, CHECK_OUT_DATE)
+            VALUES (%s, %s, %s, %s, %s)
+        """, (accommodation_id, user_id, no_rooms, check_in_date, check_out_date))
+        mysql.connection.commit()
+        cur.close()
+
+        flash("Booking successful!!", "success")
+    else:
+        cur.close()
+        flash("Sorry, all rooms are booked!", "error")
+
+    # Redirect back to the destination details page
+    return redirect(url_for('destination', destination_id=destination_id))
+
 @app.route('/logout')
 def logout():
     session.pop('username', None)

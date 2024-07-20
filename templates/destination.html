@@ -7,6 +7,12 @@
             display: none;
             margin-top: 10px;
         }
+        .message {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
     </style>
     <script>
         function toggleBookingForm(accommodationId) {
@@ -19,7 +25,13 @@
 <body>
     <h1>{{ destination[1] }} - {{ destination[2] }}</h1>
     <p>{{ destination[3] }}</p>
-
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <p class="{{ category }}">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     <h2>Accommodations</h2>
     <ul>
         {% for accommodation in accommodations %}
@@ -27,7 +39,8 @@
             {{ accommodation[1] }} - Price per night: {{ accommodation[2] }} - Available rooms: {{ accommodation[3] }}
             <a href="javascript:void(0)" onclick="toggleBookingForm('{{ accommodation[0]}}')">Book</a>
             <div class="booking-form" id="booking-form-{{ accommodation[0] }}">
-                <form method="post" action="#">
+                <form method="post" action="{{ url_for('book_accommodation', accommodation_id=accommodation[0]) }}">
+                    <input type="hidden" name="destination_id" value="{{ destination[0] }}">
                     <label>Check-in Date:</label>
                     <input type="date" name="check_in_date" required><br>
                     <label>Check-out Date:</label>
