@@ -36,3 +36,29 @@ END //
 
 DELIMITER ;
 
+--trigger for updating available seats
+DELIMITER //
+
+CREATE TRIGGER update_available_seats
+AFTER INSERT ON flight_res
+FOR EACH ROW
+BEGIN
+    -- Check if the FLIGHT_ID exists in the FLIGHT table
+    DECLARE current_seats INT;
+    
+    -- Fetch the current available seats for the flight
+    SELECT AVAIL_SEATS INTO current_seats
+    FROM FLIGHT
+    WHERE FLIGHT_ID = NEW.FLIGHT_ID;
+    
+    -- Update available seats if current seats are sufficient
+    IF current_seats IS NOT NULL THEN
+        UPDATE FLIGHT
+        SET AVAIL_SEATS = AVAIL_SEATS - NEW.NO_TICKETS
+        WHERE FLIGHT_ID = NEW.FLIGHT_ID;
+    END IF;
+END //
+
+DELIMITER ;
+
+

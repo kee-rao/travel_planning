@@ -19,7 +19,12 @@
             var form = document.getElementById('booking-form-' + accommodationId);
             form.style.display = (form.style.display === 'none') ? 'block' : 'none';
         }
-
+        function toggleFlightBookingForm(flightId) {
+            var form = document.getElementById('flight-booking-form-' + flightId);
+            form.style.display = (form.style.display === 'none') ? 'block' : 'none';
+        }
+        
+        
     </script>
 </head>
 <body>
@@ -66,10 +71,20 @@
     <ul>
         {% for flight in flights %}
         <li>
-            {{ flight[1] }} - Departure: {{ flight[2] }} - Arrival: {{ flight[3] }} - Price: {{ flight[4] }}
+            {{ flight[6] }} - Departure: {{ flight[1] }} - Arrival: {{ flight[2] }} - Departure time: {{ flight[3] }} - Return time: {{ flight[4] }} - Price: {{ flight[5] }}- Available seats: {{ flight[8] }}
+            <a href="javascript:void(0)" onclick="toggleFlightBookingForm('{{ flight[0]}}')">Book</a>
+            <div class="booking-form" id="flight-booking-form-{{ flight[0] }}">
+                <form method="post" action="{{ url_for('book_flight', flight_id=flight[0]) }}">
+                    <input type="hidden" name="destination_id" value="{{ destination[0] }}">
+                    <label>Number of Tickets:</label>
+                    <input type="number" name="no_tickets" required><br>
+                    <button type="submit">Book</button>
+                </form>
+            </div>
         </li>
         {% endfor %}
     </ul>
+
 
     <a href="{{ url_for('homepage') }}">Back to homepage</a>
 </body>

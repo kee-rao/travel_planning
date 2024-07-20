@@ -145,6 +145,45 @@ def book_accommodation(accommodation_id):
     # Redirect back to the destination details page
     return redirect(url_for('destination', destination_id=destination_id))
 
+@app.route('/book_flight/<int:flight_id>', methods=['POST'])
+def book_flight(flight_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    user_id = session['user_id']
+    no_tickets = int(request.form['no_tickets'])
+    destination_id = request.form['destination_id']
+    
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT PRICE, AVAIL_SEATS FROM FLIGHT WHERE FLIGHT_ID = %s", [flight_id])
+    flight = cur.fetchone()
+    
+    if flight and flight[1] >= no_tickets:
+        total_price = flight[0] * no_tickets
+        cur.execute("""
+            INSERT INTO flight_res (Flight_ID, User_ID, no_tickets, TotalPrice)
+            VALUES (%s, %s, %s, %s)
+        """, (flight_id, user_id, no_tickets, total_price))
+        
+        # Update the available seats
+        cur.execute("""
+            UPDATE FLIGHT
+            SET AVAIL_SEATS = AVAIL_SEATS - %s
+            WHERE FLIGHT_ID = %s
+        """, (no_tickets, flight_id))
+        
+        mysql.connection.commit()
+        cur.close()
+        
+        flash("Flight booking successful!!", "success")
+    else:
+        cur.close()
+        flash("Sorry, there are not enough available seats!", "error")
+    
+    # Redirect back to the destination details page
+    return redirect(url_for('destination', destination_id=destination_id))
+
+
 @app.route('/logout')
 def logout():
     session.pop('username', None)
