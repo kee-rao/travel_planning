@@ -93,3 +93,33 @@ input[type=submit]:hover {
 .page-container p {
     font-size: 16px;
 }
+.destination-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.destination-card {
+    align-self: start;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    width: calc(25% - 20px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.destination-card a {
+    text-decoration: none;
+    color: #333;
+    font-size: 1.2em;
+}
+
+.destination-card p {
+    margin: 5px 0;
+}
+
+.destination-card p strong {
+    font-weight: bold;
+}

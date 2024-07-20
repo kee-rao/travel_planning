@@ -15,16 +15,16 @@
     <div class="page-container">
         <h1>Welcome, {{ session['user_id'] }}</h1>
         <p>Discover your next adventure!</p>
-        <ul>
+        <div class="destination-container">
             {% for destination in destinations %}
-                <li><a href="{{ url_for('destination', destination_id=destination[0]) }}">{{ destination[1] }}</a>
-                    <p>Country: {{destination[2]}}</p>
-                    <p>Description: {{destination[3]}}</p>
-                    <p>Popularity: {{destination[4]}}</p>
-                </li>
-
+                <div class="destination-card">
+                    <a href="{{ url_for('destination', destination_id=destination[0]) }}" class="destination-title">{{ destination[1] }}</a>
+                    <p><strong>Country:</strong> {{destination[2]}}</p>
+                    <p><strong>Description:</strong> {{destination[3]}}</p>
+                    <p><strong>Popularity:</strong> {{destination[4]}}</p>
+                </div>
             {% endfor %}
-        </ul>
+        </div>
     </div>
 </body>
 </html>
