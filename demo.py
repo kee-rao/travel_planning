@@ -165,13 +165,6 @@ def book_flight(flight_id):
             VALUES (%s, %s, %s, %s)
         """, (flight_id, user_id, no_tickets, total_price))
         
-        # Update the available seats
-        cur.execute("""
-            UPDATE FLIGHT
-            SET AVAIL_SEATS = AVAIL_SEATS - %s
-            WHERE FLIGHT_ID = %s
-        """, (no_tickets, flight_id))
-        
         mysql.connection.commit()
         cur.close()
         
