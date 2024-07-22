@@ -7,7 +7,7 @@ app.secret_key = 'bananas'
 # MySQL configurations
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'password'
+app.config['MYSQL_PASSWORD'] = 'L1ghtD3ath'
 app.config['MYSQL_DB'] = 'travel'
 
 mysql = MySQL(app)
@@ -140,7 +140,7 @@ def book_accommodation(accommodation_id):
         flash("Booking successful!!", "success")
     else:
         cur.close()
-        flash("Sorry, all rooms are booked!", "error")
+        flash("Sorry, all rooms are booked!", "danger")
 
     # Redirect back to the destination details page
     return redirect(url_for('destination', destination_id=destination_id))
@@ -171,7 +171,7 @@ def book_flight(flight_id):
         flash("Flight booking successful!!", "success")
     else:
         cur.close()
-        flash("Sorry, there are not enough available seats!", "error")
+        flash("Sorry, there are not enough available seats!", "danger")
     
     # Redirect back to the destination details page
     return redirect(url_for('destination', destination_id=destination_id))

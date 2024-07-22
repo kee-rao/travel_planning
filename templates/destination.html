@@ -1,17 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Destination Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/flatly/bootstrap.min.css">
     <style>
         .booking-form {
             display: none;
             margin-top: 10px;
-        }
-        .success {
-            color: green;
-        }
-        .error {
-            color: red;
         }
     </style>
     <script>
@@ -23,69 +20,90 @@
             var form = document.getElementById('flight-booking-form-' + flightId);
             form.style.display = (form.style.display === 'none') ? 'block' : 'none';
         }
-        
-        
     </script>
 </head>
 <body>
-    <h1>{{ destination[1] }} - {{ destination[2] }}</h1>
-    <p>{{ destination[3] }}</p>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <p class="{{ category }}">{{ message }}</p>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="#">Adventure</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="#">Bookings</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">My Profile</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h1 class="mb-4">{{ destination[1] }} - {{ destination[2] }}</h1>
+        <p>{{ destination[3] }}</p>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <p class="alert alert-{{ category }}">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <h2 class="mt-4">Accommodations</h2>
+        <ul class="list-group">
+            {% for accommodation in accommodations %}
+            <li class="list-group-item">
+                {{ accommodation[1] }} - Price per night: {{ accommodation[2] }} - Available rooms: {{ accommodation[3] }}
+                <a href="javascript:void(0)" class="btn btn-primary btn-sm float-right" onclick="toggleBookingForm('{{ accommodation[0]}}')">Book</a>
+                <div class="booking-form" id="booking-form-{{ accommodation[0] }}">
+                    <form method="post" action="{{ url_for('book_accommodation', accommodation_id=accommodation[0]) }}">
+                        <input type="hidden" name="destination_id" value="{{ destination[0] }}">
+                        <div class="form-group">
+                            <label>Check-in Date:</label>
+                            <input type="date" class="form-control" name="check_in_date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Check-out Date:</label>
+                            <input type="date" class="form-control" name="check_out_date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Number of Rooms:</label>
+                            <input type="number" class="form-control" name="no_rooms" required>
+                        </div>
+                        <button type="submit" class="btn btn-success">Book</button>
+                    </form>
+                </div>
+            </li>
             {% endfor %}
-        {% endif %}
-    {% endwith %}
-    <h2>Accommodations</h2>
-    <ul>
-        {% for accommodation in accommodations %}
-        <li>
-            {{ accommodation[1] }} - Price per night: {{ accommodation[2] }} - Available rooms: {{ accommodation[3] }}
-            <a href="javascript:void(0)" onclick="toggleBookingForm('{{ accommodation[0]}}')">Book</a>
-            <div class="booking-form" id="booking-form-{{ accommodation[0] }}">
-                <form method="post" action="{{ url_for('book_accommodation', accommodation_id=accommodation[0]) }}">
-                    <input type="hidden" name="destination_id" value="{{ destination[0] }}">
-                    <label>Check-in Date:</label>
-                    <input type="date" name="check_in_date" required><br>
-                    <label>Check-out Date:</label>
-                    <input type="date" name="check_out_date" required><br>
-                    <label>Number of Rooms:</label>
-                    <input type="number" name="no_rooms" required><br>
-                    <button type="submit">Book</button>
-                </form>
+        </ul>
+
+        <h2 class="mt-4">Flights</h2>
+        <form method="post" class="form-inline mb-4">
+            <div class="form-group mx-sm-3 mb-2">
+                <label for="departure_date" class="sr-only">Departure Date</label>
+                <input type="date" class="form-control" id="departure_date" name="departure_date" required>
             </div>
-        </li>
-        {% endfor %}
-    </ul>
-
-    <h2>Flights</h2>
-    <form method="post">
-        <label>Departure Date:</label>
-        <input type="date" name="departure_date" required>
-        <label>Return Date:</label>
-        <input type="date" name="return_date" required>
-        <button type="submit">Filter Flights</button>
-    </form>
-    
-    <ul>
-        {% for flight in flights %}
-        <li>
-            {{ flight[6] }} - Departure: {{ flight[1] }} - Arrival: {{ flight[2] }} - Departure time: {{ flight[3] }} - Return time: {{ flight[4] }} - Price: {{ flight[5] }}- Available seats: {{ flight[8] }}
-            <a href="javascript:void(0)" onclick="toggleFlightBookingForm('{{ flight[0]}}')">Book</a>
-            <div class="booking-form" id="flight-booking-form-{{ flight[0] }}">
-                <form method="post" action="{{ url_for('book_flight', flight_id=flight[0]) }}">
-                    <input type="hidden" name="destination_id" value="{{ destination[0] }}">
-                    <label>Number of Tickets:</label>
-                    <input type="number" name="no_tickets" required><br>
-                    <button type="submit">Book</button>
-                </form>
+            <div class="form-group mx-sm-3 mb-2">
+                <label for="return_date" class="sr-only">Return Date</label>
+                <input type="date" class="form-control" id="return_date" name="return_date" required>
             </div>
-        </li>
-        {% endfor %}
-    </ul>
-
-
-    <a href="{{ url_for('homepage') }}">Back to homepage</a>
+            <button type="submit" class="btn btn-primary mb-2">Filter Flights</button>
+        </form>
+        
+        <ul class="list-group">
+            {% for flight in flights %}
+            <li class="list-group-item">
+                {{ flight[6] }} - Departure: {{ flight[1] }} - Arrival: {{ flight[2] }} - Departure time: {{ flight[3] }} - Return time: {{ flight[4] }} - Price: {{ flight[5] }} - Available seats: {{ flight[8] }}
+                <a href="javascript:void(0)" class="btn btn-primary btn-sm float-right" onclick="toggleFlightBookingForm('{{ flight[0]}}')">Book</a>
+                <div class="booking-form" id="flight-booking-form-{{ flight[0] }}">
+                    <form method="post" action="{{ url_for('book_flight', flight_id=flight[0]) }}">
+                        <input type="hidden" name="destination_id" value="{{ destination[0] }}">
+                        <div class="form-group">
+                            <label>Number of Tickets:</label>
+                            <input type="number" class="form-control" name="no_tickets" required>
+                        </div>
+                        <button type="submit" class="btn btn-success">Book</button>
+                    </form>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        
+        <a href="{{ url_for('homepage') }}" class="btn btn-primary mt-4">Back to homepage</a>
+    </div>
 </body>
 </html>
