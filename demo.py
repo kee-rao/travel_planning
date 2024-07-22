@@ -7,7 +7,7 @@ app.secret_key = 'bananas'
 # MySQL configurations
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'L1ghtD3ath'
+app.config['MYSQL_PASSWORD'] = 'password'
 app.config['MYSQL_DB'] = 'travel'
 
 mysql = MySQL(app)
@@ -79,7 +79,7 @@ def homepage():
     if 'user_id' in session:
         # Fetch destinations from database with name, country, popularity, and description
         cur = mysql.connection.cursor()
-        cur.execute("SELECT destination_id, Dest_NAME, country, description ,popularity FROM destination ORDER BY popularity DESC LIMIT 6")
+        cur.execute("SELECT destination_id, Dest_NAME, country, description ,popularity FROM destination ORDER BY popularity DESC LIMIT 9")
         destinations = cur.fetchall()
         cur.close()
         
@@ -176,6 +176,33 @@ def book_flight(flight_id):
     # Redirect back to the destination details page
     return redirect(url_for('destination', destination_id=destination_id))
 
+@app.route('/bookings')
+def bookings():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    user_id = session['user_id']
+    cur = mysql.connection.cursor()
+    
+    cur.execute("""
+        SELECT a.accomodation_name, ar.check_in_date, ar.check_out_date, ar.no_rooms, ar.price
+        FROM acc_res ar
+        JOIN accommodation a ON ar.accommodation_id = a.accommodation_id
+        WHERE ar.user_id = %s
+    """, [user_id])
+    accommodations = cur.fetchall()
+
+    cur.execute("""
+        SELECT f.departure_date, f.return_date, f.departure_time, f.return_time, f.airline, fr.totalprice, fr.no_tickets
+        FROM flight_res fr
+        JOIN flight f ON fr.flight_id = f.flight_id
+        WHERE fr.user_id = %s
+    """, [user_id])
+    flights = cur.fetchall()
+    
+    cur.close()
+    
+    return render_template('bookings.html', accommodations=accommodations, flights=flights)
 
 @app.route('/logout')
 def logout():

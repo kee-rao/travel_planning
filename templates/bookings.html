@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Bookings</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/flatly/bootstrap.min.css">
+    <style>
+        .card-title {
+            color: rgb(55, 6, 101);
+        }
+        .nav-link.active {
+            color: #00ffaa !important; 
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="#">Adventure</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('homepage') }}">Home</a></li>
+                <li class="nav-item"><a class="nav-link active" href="{{ url_for('bookings') }}">Bookings</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">My Profile</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h1>Your Bookings</h1>
+        <div class="form-group">
+            <label for="bookingType">Filter by:</label>
+            <select id="bookingType" class="form-control">
+                <option value="accommodations">Accommodations</option>
+                <option value="flights">Flights</option>
+            </select>
+        </div>
+        <div id="accommodationsSection">
+            <h2>Accommodation Bookings</h2>
+            {% if accommodations %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Check-in Date</th>
+                            <th>Check-out Date</th>
+                            <th>Number of Rooms</th>
+                            <th>Price</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in accommodations %}
+                            <tr>
+                                <td>{{ booking[0] }}</td>
+                                <td>{{ booking[1] }}</td>
+                                <td>{{ booking[2] }}</td>
+                                <td>{{ booking[3] }}</td>
+                                <td>${{ booking[4] }}</td>
+                                <td>
+                                    <a href="#" class="btn btn-danger btn-sm">Cancel</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No accommodation bookings found.</p>
+            {% endif %}
+        </div>
+
+        <div id="flightsSection" class="hidden">
+            <h2>Flight Bookings</h2>
+            {% if flights %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Departure Date</th>
+                            <th>Return Date</th>
+                            <th>Departure Time</th>
+                            <th>Return Time</th>
+                            <th>Airline</th>
+                            <th>Total Price</th>
+                            <th>Number of Tickets</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in flights %}
+                            <tr>
+                                <td>{{ booking[0] }}</td>
+                                <td>{{ booking[1] }}</td>
+                                <td>{{ booking[2] }}</td>
+                                <td>{{ booking[3] }}</td>
+                                <td>{{ booking[4] }}</td>
+                                <td>${{ booking[5] }}</td>
+                                <td>{{ booking[6] }}</td>
+                                <td>
+                                    <a href="#" class="btn btn-danger btn-sm">Cancel</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No flight bookings found.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('bookingType').addEventListener('change', function() {
+            var value = this.value;
+            if (value === 'accommodations') {
+                document.getElementById('accommodationsSection').classList.remove('hidden');
+                document.getElementById('flightsSection').classList.add('hidden');
+            } else if (value === 'flights') {
+                document.getElementById('accommodationsSection').classList.add('hidden');
+                document.getElementById('flightsSection').classList.remove('hidden');
+            }
+        });
+
+    </script>
+</body>
+</html>
