@@ -185,7 +185,7 @@ def bookings():
     cur = mysql.connection.cursor()
     
     cur.execute("""
-        SELECT a.accomodation_name, ar.check_in_date, ar.check_out_date, ar.no_rooms, ar.price
+        SELECT a.accomodation_name, ar.check_in_date, ar.check_out_date, ar.no_rooms, ar.price, ar.reservation_id
         FROM acc_res ar
         JOIN accommodation a ON ar.accommodation_id = a.accommodation_id
         WHERE ar.user_id = %s
@@ -193,7 +193,7 @@ def bookings():
     accommodations = cur.fetchall()
 
     cur.execute("""
-        SELECT f.departure_date, f.return_date, f.departure_time, f.return_time, f.airline, fr.totalprice, fr.no_tickets
+        SELECT f.departure_date, f.return_date, f.departure_time, f.return_time, f.airline, fr.totalprice, fr.no_tickets, fr.flight_resid
         FROM flight_res fr
         JOIN flight f ON fr.flight_id = f.flight_id
         WHERE fr.user_id = %s
@@ -203,6 +203,41 @@ def bookings():
     cur.close()
     
     return render_template('bookings.html', accommodations=accommodations, flights=flights)
+
+
+@app.route('/delete_booking/<string:booking_type>/<int:booking_id>', methods=['POST'])
+def delete_booking(booking_type, booking_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    cur = mysql.connection.cursor()
+    
+    if booking_type == 'accommodation':
+        # Get accommodation details for updating available rooms
+        cur.execute("SELECT ACCOMMODATION_ID, NO_ROOMS FROM acc_res WHERE Reservation_ID = %s", [booking_id])
+        reservation = cur.fetchone()
+        
+        if reservation:
+            accommodation_id, no_rooms = reservation
+            cur.execute("DELETE FROM acc_res WHERE Reservation_ID = %s", [booking_id])
+            cur.execute("UPDATE ACCOMMODATION SET AVAIL_ROOMS = AVAIL_ROOMS + %s WHERE ACCOMMODATION_ID = %s", (no_rooms, accommodation_id))
+    
+    elif booking_type == 'flight':
+        # Get flight details for updating available seats
+        cur.execute("SELECT FLIGHT_ID, no_tickets FROM flight_res WHERE flight_resID = %s", [booking_id])
+        reservation = cur.fetchone()
+        
+        if reservation:
+            flight_id, no_tickets = reservation
+            cur.execute("DELETE FROM flight_res WHERE flight_resID = %s", [booking_id])
+            cur.execute("UPDATE FLIGHT SET AVAIL_SEATS = AVAIL_SEATS + %s WHERE FLIGHT_ID = %s", (no_tickets, flight_id))
+    
+    mysql.connection.commit()
+    cur.close()
+    
+    flash("Booking canceled successfully!", "success")
+    return redirect(url_for('bookings'))
+
 
 @app.route('/logout')
 def logout():

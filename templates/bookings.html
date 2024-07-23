@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/flatly/bootstrap.min.css">
     <style>
         .hero-section {
-            background-image: url("{{ url_for('static', filename='images/container_bg.jpg') }}"); /* Replace with your image URL */
+            background-image: url("{{ url_for('static', filename='images/container_bg.jpg') }}");
             background-size: cover;
             background-position: center;
             color: white;
@@ -31,6 +31,29 @@
             display: none;
         }
     </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('bookingType').addEventListener('change', function() {
+                var value = this.value;
+                if (value === 'accommodations') {
+                    document.getElementById('accommodationsSection').classList.remove('hidden');
+                    document.getElementById('flightsSection').classList.add('hidden');
+                } else if (value === 'flights') {
+                    document.getElementById('accommodationsSection').classList.add('hidden');
+                    document.getElementById('flightsSection').classList.remove('hidden');
+                }
+            });
+
+            document.querySelectorAll('.cancel-link').forEach(function(link) {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    if (confirm('Are you sure you want to cancel this booking?')) {
+                        this.closest('form').submit();
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -82,7 +105,9 @@
                                 <td>{{ booking[3] }}</td>
                                 <td>${{ booking[4] }}</td>
                                 <td>
-                                    <a href="#" class="btn btn-danger btn-sm">Cancel</a>
+                                    <form action="{{ url_for('delete_booking', booking_type='accommodation', booking_id=booking[5]) }}" method="post" class="cancel-form">
+                                        <a href="#" class="btn btn-danger btn-sm cancel-link">Cancel</a>
+                                    </form>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -120,7 +145,9 @@
                                 <td>${{ booking[5] }}</td>
                                 <td>{{ booking[6] }}</td>
                                 <td>
-                                    <a href="#" class="btn btn-danger btn-sm">Cancel</a>
+                                    <form action="{{ url_for('delete_booking', booking_type='flight', booking_id=booking[7]) }}" method="post" class="cancel-form">
+                                        <a href="#" class="btn btn-danger btn-sm cancel-link">Cancel</a>
+                                    </form>
                                 </td>
                             </tr>
                         {% endfor %}
