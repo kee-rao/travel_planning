@@ -6,11 +6,52 @@
     <title>Welcome</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/flatly/bootstrap.min.css">
     <style>
-        .card-title{
-            color:rgb(55, 6, 101)
+        .card-title {
+            color: rgb(55, 6, 101);
         }
         .nav-link.active {
             color: #00ffaa !important; /* Replace with your desired color */
+        }
+        .hero-section {
+            background: #f8f9fa; /* Off-white background color */
+            color: #333; /* Dark text color for contrast */
+            padding: 10px 0;
+            text-align: center;
+        }
+        .hero-section h1 {
+            font-size: 3rem; /* Adjust font size as needed */
+            margin-bottom: 10px; /* Add margin below the heading */
+        }
+        .hero-section p.lead {
+            font-size: 1.5rem; /* Adjust font size for the lead paragraph */
+        }
+        .background-container {
+            background: url("{{ url_for('static', filename='images/container_bg.jpg') }}") no-repeat center center; /* Background image for container */
+            background-size: cover;
+            padding: 40px 0;
+            position: relative;
+        }
+        .content {
+            position: relative;
+            z-index: 2;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 0px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.7);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .card-link {
+            text-decoration: none;
+            color: inherit;
+        }
+        .card-link:hover .card-title {
+            color: #00ffaa;
         }
     </style>
 </head>
@@ -26,24 +67,30 @@
             </ul>
         </div>
     </nav>
-    <div class="container mt-5">
-        <div class="text-center">
-            <h1>Welcome, {{ session['user_id'] }}</h1>
-            <p class="lead">Discover your next adventure!</p>
-        </div>
-        <div class="row">
-            {% for destination in destinations %}
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100 ">
-                        <div class="card-body">
-                            <a href="{{ url_for('destination', destination_id=destination[0]) }}" class="card-title h4">{{ destination[1] }}</a>
-                            <p class="card-text"><strong>Country:</strong> {{ destination[2] }}</p>
-                            <p class="card-text"><strong>Description:</strong> {{ destination[3] }}</p>
-                            <p class="card-text"><strong>Popularity:</strong> {{ destination[4] }}</p>
-                        </div>
+
+    <div class="hero-section text-center">
+        <h1>Welcome, {{ session['user_id'] }}</h1>
+        <p class="lead">Discover your next adventure!</p>
+    </div>
+
+    <div class="background-container">
+        <div class="content container mt-5">
+            <div class="row">
+                {% for destination in destinations %}
+                    <div class="col-md-4 mb-4">
+                        <a href="{{ url_for('destination', destination_id=destination[0]) }}" class="card-link">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h4 class="card-title">{{ destination[1] }}</h4>
+                                    <p class="card-text"><strong>Country:</strong> {{ destination[2] }}</p>
+                                    <p class="card-text"><strong>Description:</strong> {{ destination[3] }}</p>
+                                    <p class="card-text"><strong>Popularity:</strong> {{ destination[4] }}</p>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
         </div>
     </div>
 </body>
