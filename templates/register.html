@@ -4,16 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Registration</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/flatly/bootstrap.min.css" rel="stylesheet">
     <style>
-        body{
+        body {
             font-family: Arial, sans-serif;
-            background-image: url("{{ url_for('static', filename='images/register.jpg') }}");
+            background-image: url("{{ url_for('static', filename='images/container_bg.jpg') }}");
             background-size: cover;
             background-position: center;
             text-align: center;
             margin: 0;
             padding: 0;
+        }
+        .container {
+            max-width: 500px;
+            margin: 100px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .btn {
+            width: 100%;
         }
     </style>
 </head>
@@ -21,25 +33,30 @@
     <div class="container" style="position:relative; left:60px">
         <h2>User Registration</h2>
         {% if error %}
-            <p class="error">{{ error }}</p>
+            <div class="alert alert-danger" role="alert">{{ error }}</div>
         {% endif %}
         <form method="POST" action="{{ url_for('register') }}">
-            <label for="username">Name:</label><br>
-            <input type="text" id="username" name="username" required><br><br>
-
-            <label for="user_id">User ID:</label><br>
-            <input type="text" id="user_id" name="user_id" required><br><br>
-
-            <label for="password">Password:</label><br>
-            <input type="password" id="password" name="password" required><br><br>
-
-            <label for="email">Email:</label><br>
-            <input type="email" id="email" name="email" required><br><br>
-
-            <label for="phno">Phone Number:</label><br>
-            <input type="text" id="phno" name="phno" required><br><br>
-
-            <input type="submit" value="Register" class="btn">
+            <div class="form-group">
+                <label for="username">Name:</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="user_id">User ID:</label>
+                <input type="text" class="form-control" id="user_id" name="user_id" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="phno">Phone Number:</label>
+                <input type="text" class="form-control" id="phno" name="phno" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
         </form>
     </div>
 </body>
