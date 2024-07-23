@@ -39,7 +39,7 @@
             border: 1px solid #ddd;
             border-radius: 0px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background-color: rgba(255, 255, 255, 0.7);
+            background-color: rgba(255, 255, 255, 0.8);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         .card:hover {
@@ -51,7 +51,7 @@
             color: inherit;
         }
         .card-link:hover .card-title {
-            color: #00ffaa;
+            color: #1f8966;
         }
     </style>
 </head>
@@ -80,7 +80,7 @@
                         <a href="{{ url_for('destination', destination_id=destination[0]) }}" class="card-link">
                             <div class="card h-100">
                                 <div class="card-body">
-                                    <h4 class="card-title">{{ destination[1] }}</h4>
+                                    <h4 class="card-title"><b>{{ destination[1] }}</b></h4>
                                     <p class="card-text"><strong>Country:</strong> {{ destination[2] }}</p>
                                     <p class="card-text"><strong>Description:</strong> {{ destination[3] }}</p>
                                     <p class="card-text"><strong>Popularity:</strong> {{ destination[4] }}</p>
