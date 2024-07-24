@@ -74,6 +74,17 @@
     </div>
 
     <div class="container mt-5">
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} mt-2">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
         <h1>Your Bookings</h1>
         <div class="form-group">
             <label for="bookingType">Filter by:</label>
@@ -160,16 +171,16 @@
     </div>
 
     <script>
-        document.getElementById('bookingType').addEventListener('change', function() {
-            var value = this.value;
-            if (value === 'accommodations') {
-                document.getElementById('accommodationsSection').classList.remove('hidden');
-                document.getElementById('flightsSection').classList.add('hidden');
-            } else if (value === 'flights') {
-                document.getElementById('accommodationsSection').classList.add('hidden');
-                document.getElementById('flightsSection').classList.remove('hidden');
-            }
-        });
+            document.getElementById('bookingType').addEventListener('change', function() {
+                var value = this.value;
+                if (value === 'accommodations') {
+                    document.getElementById('accommodationsSection').classList.remove('hidden');
+                    document.getElementById('flightsSection').classList.add('hidden');
+                } else if (value === 'flights') {
+                    document.getElementById('accommodationsSection').classList.add('hidden');
+                    document.getElementById('flightsSection').classList.remove('hidden');
+                }
+            });
     </script>
 </body>
 </html>
